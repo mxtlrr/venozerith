@@ -23,3 +23,10 @@ Output file will be in `bin/`
 | `x` | Start/Stop   |
 
 Venozerith increase BPM in increments of 10, and by default starts at 240. It has an upper limit of 1600 BPM.
+
+
+# Demo
+<figure class="video_container">
+  <iframe src="demo.mp4" frameborder="0" allowfullscreen="true"> 
+</iframe>
+</figure>
