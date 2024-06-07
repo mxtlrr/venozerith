@@ -11,6 +11,7 @@ Venozerith is a fully-fledged, drum-only DAW
 
 # Roadmap
 - [ ] All samples added
+- [ ] Be able to play audio
 - [ ] MIDI Editor
 - [X] Config support
 
