@@ -15,11 +15,13 @@ int main(void) {
 	InitWindow(640, 480, TextFormat("Venozerith - v%s", VERSION));
 	SetTargetFPS(60); // Don't overdraw stuff.
 
+	char* test = data_from_file("keys.ini");
+	keybinding_arr k = get_keybinds(test);
+
+	
 	int tab = 1; // Current tab we're on
 
 	while(!WindowShouldClose()){
-		char* test = data_from_file("keys.ini");
-		keybinding_arr k = get_keybinds(test);
 		
 		// Stupid code to change tabs
 		if(IsKeyPressed(KEY_ONE)) tab = 1;
