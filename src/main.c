@@ -5,6 +5,7 @@
 #include "version.h"
 #include "keybindings.h"
 #include "config.h"
+#include "sound/sound.h"
 
 char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
@@ -13,12 +14,14 @@ int main(void) {
 	SetTraceLogCallback(_); // Disable trace log callback
 
 	InitWindow(640, 480, TextFormat("Venozerith - v%s", VERSION));
+	InitAudioDevice();
 	SetTargetFPS(60); // Don't overdraw stuff.
 
 	char* test = data_from_file("keys.ini");
 	keybinding_arr k = get_keybinds(test);
 
-	
+	sounds_t s = loadSounds();
+
 	int tab = 1; // Current tab we're on
 
 	while(!WindowShouldClose()){
@@ -40,7 +43,20 @@ int main(void) {
 					DrawText("2", 30, 450, 20, GRAY);
 					DrawText("3", 55, 450, 20, GRAY);
 
-					// TODO.
+					// Snare
+					if(IsKeyPressed(k.keys[0].key)) {
+						PlaySound(s.sounds[0]);
+					}
+					
+					// Hi-hat
+					if(IsKeyPressed(k.keys[1].key)) {
+						PlaySound(s.sounds[1]);
+					}
+
+					// Kick
+					if(IsKeyPressed(k.keys[2].key)) {
+						PlaySound(s.sounds[2]);
+					}
 					break;
 
 				// MIDI Editor
