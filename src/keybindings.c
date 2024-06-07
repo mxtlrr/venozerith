@@ -19,6 +19,17 @@ char keys[] = {
   'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 };
 
+int get_ordinal(byte key){
+  int index = 0;
+  for(int i = 0; i < 91; i++){
+    if(keys[i] == key){
+      index = i;
+      break;
+    }
+  }
+  return index;
+}
+
 char* get_action_from_num(byte action){
   switch(action){
     case PLAY_SNARE:
@@ -32,4 +43,19 @@ char* get_action_from_num(byte action){
       break;
   }
   return "Unknown";
+}
+
+
+void set_action(byte action, byte key){
+  switch(action){
+    case PLAY_SNARE:
+      keybinds[0].key = key;
+      break;
+    case PLAY_HIHAT:
+      keybinds[1].key = key;
+      break;
+    case PLAY_KICK:
+      keybinds[2].key = key;
+      break;
+  }
 }

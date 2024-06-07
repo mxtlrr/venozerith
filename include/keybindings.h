@@ -17,3 +17,5 @@ extern char keys[];             // The corresponding
                                 // key, e.g. keys[65] = 'A'.
 
 char* get_action_from_num(byte action);
+void set_action(byte action, byte key);
+int get_ordinal(byte key);

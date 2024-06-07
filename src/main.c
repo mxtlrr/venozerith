@@ -1,8 +1,10 @@
 #include <raylib.h>
 #include <stdio.h>
 
+
 #include "version.h"
 #include "keybindings.h"
+#include "config.h"
 
 char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
@@ -28,10 +30,13 @@ int main(void) {
 				// Show keybindings
 				case 3:
 					int starting_y = 50;
+						char* test = data_from_file("keys.ini");
+						keybinding_arr k = get_keybinds(test);
 					for(int i = 0; i < 3; i++) {
 						DrawText(TextFormat("Key \"%c\" - Action: %s",
-												keys[(keybinds[i].key)],
-												get_action_from_num(keybinds[i].action)), 50, starting_y, 20, BLACK);
+												keys[(k.keys[i].key)],
+												get_action_from_num(k.keys[i].action)), 50,
+												starting_y, 20, BLACK);
 						starting_y += 30;
 					}
 			}
