@@ -2,13 +2,22 @@
 
 char* data_from_file(char* filepath){
   FILE* fp = fopen(filepath, "r");
+  if(!fp) {
+    // TODO: if on windows, use MessageBox
+    fprintf(stderr, "Couldn't open file: %s\n", filepath);
+    exit(1);
+  
+  }
   long file_length = 0;             // Length of the file
   fseek(fp, 0, SEEK_END);           // Go to the end of the file
   file_length = ftell(fp);
   rewind(fp);                       // Go back
 
   char* buffer = (char*)malloc(file_length * sizeof(char));
-  fread(buffer, file_length, 1, fp);
+  int p = fread(buffer, file_length, 1, fp);
+  if (p != 1) { // Nothing read
+    fprintf(stderr, "Failed to fread()\n");
+  }
   fclose(fp);         // Close file pointer.
   return buffer;
 
