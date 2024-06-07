@@ -12,7 +12,7 @@ Venozerith is a fully-fledged, drum-only DAW
 # Roadmap
 - [ ] All samples added
 - [ ] MIDI Editor
-- [ ] Config support
+- [X] Config support
 
 # Compilation
 You will need ralyib and some C/C++ compiler, for example `gcc`. Then you can
