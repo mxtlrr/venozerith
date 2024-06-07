@@ -26,28 +26,50 @@ char* data_from_file(char* filepath){
 keybinding_arr get_keybinds(char* data){
 
   // Parse the data
-  char* token = strtok(data, " "); // Get first token
+  char* token = strtok(data, "\n"); // Get first token
 
-  char* tokens[10] = { 0 };
+  char* tokens[4] = { 0 };
+  size_t total_length = 0;
+
   for(int i = 0; token != NULL; i++){
+    total_length += strlen(token) + 1;
+  
     tokens[i] = token;
-    token = strtok(NULL, " ");
+    token = strtok(NULL, "\n");
   }
 
-  // Super gross code. FIXME. But it works
-  char snare  = tokens[2][1];
-  char hi_hat = tokens[5][1];
-  char kick   = tokens[8][1];
+  /* We use i=1 to skip the [options] */
+  int index = 0;
+  char* tokens_space[9] = { 0 };
 
+  for(int i = 1; i < 4; i++){
+    char* token2 = strtok(tokens[i], " ");
+    for(int j = 0; token2 != NULL; j++){
+      tokens_space[index] = token2;
+      token2 = strtok(NULL, " ");
+      index++;
+    }
+  }
 
   keybinding_arr k = { 0 };
+  for(int i = 0; i < 9; i++){
+    if(strcmp(tokens_space[i], "snare") == 0){
+      // Then we are using the snare
+      k.keys[0].action = PLAY_SNARE;
+      k.keys[0].key = get_ordinal(tokens_space[i+2][1]);
+    }
 
-  // Also gross code:( I wish there
-  // was an easier way to do this
-  k.keys[0].action = PLAY_SNARE; k.keys[0].key = get_ordinal(snare);
-  k.keys[1].action = PLAY_HIHAT; k.keys[1].key = get_ordinal(hi_hat);
-  k.keys[2].action = PLAY_KICK;  k.keys[2].key = get_ordinal(kick);
-  
+    if(strcmp(tokens_space[i], "hihat") == 0){
+      k.keys[1].action = PLAY_HIHAT;
+      k.keys[1].key = get_ordinal(tokens_space[i+2][1]);
+    }
+
+    if(strcmp(tokens_space[i], "kick") == 0){
+      k.keys[2].action = PLAY_KICK;
+      k.keys[2].key = get_ordinal(tokens_space[i+2][1]);
+    }    
+  }
+
   return k; // Access via k.keys.
             // Stupid practice tbh.
 }
