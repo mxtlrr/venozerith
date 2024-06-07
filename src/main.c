@@ -18,6 +18,9 @@ int main(void) {
 	int tab = 1; // Current tab we're on
 
 	while(!WindowShouldClose()){
+		char* test = data_from_file("keys.ini");
+		keybinding_arr k = get_keybinds(test);
+		
 		// Stupid code to change tabs
 		if(IsKeyPressed(KEY_ONE)) tab = 1;
 		if(IsKeyPressed(KEY_TWO)) tab = 2;
@@ -26,12 +29,36 @@ int main(void) {
 		BeginDrawing();
 			ClearBackground(WHITE);
 			DrawText(TextFormat("TAB: %d [%s]", tab, tabs[tab]), 10, 10, 20, BLACK);
+
 			switch(tab){
+				// Play live
+				case 1:
+					// Active indicator
+					DrawText("1", 10, 450, 20, BLACK);
+					DrawText("2", 30, 450, 20, GRAY);
+					DrawText("3", 55, 450, 20, GRAY);
+
+					// TODO.
+					break;
+
+				// MIDI Editor
+				case 2:
+					// Active indicator
+					DrawText("1", 10, 450, 20, GRAY);
+					DrawText("2", 30, 450, 20, BLACK);
+					DrawText("3", 55, 450, 20, GRAY);
+
+					// TODO:
+					break;
+
 				// Show keybindings
 				case 3:
+					// Active indicator
+					DrawText("1", 10, 450, 20, GRAY);
+					DrawText("2", 30, 450, 20, GRAY);
+					DrawText("3", 55, 450, 20, BLACK);
+
 					int starting_y = 50;
-						char* test = data_from_file("keys.ini");
-						keybinding_arr k = get_keybinds(test);
 					for(int i = 0; i < 3; i++) {
 						DrawText(TextFormat("Key \"%c\" - Action: %s",
 												keys[(k.keys[i].key)],
@@ -39,6 +66,7 @@ int main(void) {
 												starting_y, 20, BLACK);
 						starting_y += 30;
 					}
+					break;
 			}
 		EndDrawing();
 	}
