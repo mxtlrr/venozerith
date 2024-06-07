@@ -1,28 +1,19 @@
-SRCS 	  := $(shell find . -type f -name '*.c')
-
-CC 	    := gcc
-CFLAGS  := -Wall -Wextra -std=c99 -Os -g
-LDFLAGS := -lm -lraylib
+CC := gcc
+CFLAGS  := -Wall -Wextra -std=c99 -Os -g -Iinclude/ $(LDFLAGS)
+LDFLAGS := -lraylib -lm
 
 TARGET := bin/venozerith
-OBJS   := $(SRCS:.c=.o)
+override OFILES := $(shell find ./obj/ -type f -name '*.o')
+override CFILES := $(shell find ./src/ -type f -name '*.c')
 
-# Default target
-all: build_dir $(TARGET)
+all: build
 .PHONY: all
 
-build_dir:
-	@mkdir -p bin/
-
-$(TARGET): $(OBJS)
-	@$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS)
-	@echo LD ./$(TARGET)
-	@rm -f $(OBJS)
-
-# Compile each C file
-%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo CC $<
+build:
+	@mkdir -p bin/ obj/
+	@$(foreach file, $(CFILES), $(CC) $(CFLAGS) -c $(file) -o obj/$(basename $(notdir $(file))).o;echo CC $(file);)
+	@gcc $(OFILES) $(LDFLAGS) -o $(TARGET)
+	@echo LD $(TARGET)
 
 clean:
-	@rm -rf bin/
+	rm -rf bin/
