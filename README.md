@@ -1,32 +1,24 @@
 # Venozerith
-Tiny, fast and high BPM "blast-beat" generator. Written in C.
+Venozerith is a fully-fledged, drum-only DAW
+
+## Features
+- Snare, Hi-Hat, Kick, etc all included.
+- Configurable keybindings
+- MIDI Editor
+- Lightweight
+- Beginner-friendly UI
+
+
+# Roadmap
+- [ ] All samples added
+- [ ] MIDI Editor
+- [ ] Config support
 
 # Compilation
-
-## Dependencies
-- Raylib
-
-## How To Compile
-Once you have raylib installed you can just run
+You will need ralyib and some C/C++ compiler, for example `gcc`. Then you can
+just run
 ```
-$ make
+make || make
 ```
 
-Output file will be in `bin/`
-
-# Usage
-
-| Key | Function |
-| --- | -------- |
-| `a` | Increase BPM |
-| `d` | Decrease BPM |
-| `x` | Start/Stop   |
-
-Venozerith increase BPM in increments of 10, and by default starts at 240. It has an upper limit of 1600 BPM.
-
-
-# Demo
-
-
-https://github.com/mxtlrr/venozerith/assets/117592709/8b34a87d-0608-4d46-b518-639d80d8f8b0
-
+The compiled binary will be in `./bin/venozerith/`
