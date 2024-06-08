@@ -6,6 +6,7 @@
 #include "keybindings.h"
 #include "config.h"
 #include "sound/sound.h"
+#include "tabs/midi.h"
 
 char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
@@ -89,6 +90,10 @@ int main(void) {
 		EndDrawing();
 	}
 
+	for(int i = 0; i < 3; i++){
+		UnloadSound(s.sounds[i]);
+	}
+	CloseAudioDevice();
 	CloseWindow();
 	return 0;
 }

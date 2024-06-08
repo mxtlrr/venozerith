@@ -13,6 +13,8 @@
 #include <raylib.h>
 
 
+#include "sound/sound.h"
+
 enum CODE_VALUES {
   SNARE = 'S',
   HIHAT = 'H',
@@ -21,7 +23,8 @@ enum CODE_VALUES {
 };
 
 typedef struct {
-  char codes[16];
+  char codes[15];
+  int bpm;
 } track_t;
 
 typedef struct {
@@ -29,7 +32,5 @@ typedef struct {
   int bpm;            // Range: 120 - 380
 } midi_t; // The tracks
 
-
-
 midi_t make_midi_from_tracks(track_t track1, track_t track2, track_t track3);
-void play_midi(midi_t midi);
+void play_midi(midi_t midi, sounds_t sounds);
