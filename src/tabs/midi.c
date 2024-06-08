@@ -20,7 +20,7 @@ void play_midi(midi_t midi, sounds_t sounds){
                        midi.tracks[2] };
 
   // We have the three tracks.
-  int kick_delay  = get_len(traxx[0].bpm, 2);
+  float kick_delay = get_len(traxx[0].bpm, 2);
 
   char cool[15][3] = { {0} };
   // Set up our stuff
@@ -50,10 +50,11 @@ void play_midi(midi_t midi, sounds_t sounds){
           break;
       }
     }
-    int delay_msec = get_len(traxx[0].bpm, kick_delay);
+    int delay_msec = get_len(traxx[0].bpm, (float)kick_delay);
+    printf("Track BPM -> %d | ", traxx[0].bpm);
     float delay = (float)((float)delay_msec/1000);
-    printf("Cool\n");
-    WaitTime(get_len(delay, kick_delay));
-    printf("Awesome\n");
+    printf("Delay (ms) is %f\n", delay);
+
+    WaitTime(delay/1000); // Don't wait hundreds of seconds lmao
   }
 }

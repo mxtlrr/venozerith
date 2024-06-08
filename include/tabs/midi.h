@@ -14,6 +14,7 @@
 
 
 #include "sound/sound.h"
+#include "frames.h"
 
 enum CODE_VALUES {
   SNARE = 'S',

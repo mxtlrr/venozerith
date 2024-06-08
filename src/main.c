@@ -7,6 +7,7 @@
 #include "config.h"
 #include "sound/sound.h"
 #include "tabs/midi.h"
+#include "frames.h"
 
 char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
@@ -16,16 +17,22 @@ int main(void) {
 
 	InitWindow(640, 480, TextFormat("Venozerith - v%s", VERSION));
 	InitAudioDevice();
-	SetTargetFPS(60); // Don't overdraw stuff.
+	SetTargetFPS(1000);
 
 	char* test = data_from_file("keys.ini");
 	keybinding_arr k = get_keybinds(test);
 
 	sounds_t s = loadSounds();
 
-	int tab = 1; // Current tab we're on
+	track_t track1 = { .bpm = 360, .codes = "---------------" };
+	track_t track2 = { .bpm = 360, .codes = "S-S-S-S-S-S-S-S" };
+	track_t track3 = { .bpm = 360, .codes = "-K-K-K-K-K-K-K-" };
 
-	int bpm = 240;
+	midi_t midi = make_midi_from_tracks(track1, track2, track3);
+	play_midi(midi, s);
+
+
+	int tab = 1; // Current tab we're on
 	while(!WindowShouldClose()){
 		
 		// Stupid code to change tabs
@@ -90,7 +97,12 @@ int main(void) {
 					}
 					break;
 			}
+
+		DrawText(TextFormat("%.4d / 1000", getframes()), 510, 450, 20, GRAY);
 		EndDrawing();
+
+		if((getframes() <= 1000)) setframes(getframes() + 1);
+		else setframes(0);
 	}
 	
 	for(int i = 0; i < 3; i++){
