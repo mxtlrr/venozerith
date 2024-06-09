@@ -28,3 +28,16 @@ void GrabInput(keybinding_arr k, sounds_t s);
 
 // Meat and potatoes, draws everything to the screen.
 void DrawMIDI();
+
+/* Indicator */
+enum LOC {
+  GO_LEFT  = 0xf2,
+  GO_RIGHT = 0x2f,
+  GO_UP    = 0xaf,
+  GO_DOWN  = 0xfa
+};
+
+void move_arrow(__uint8_t loc);
+
+// Stupid stupid stupid
+void set_arrow_loc(float x, float y);

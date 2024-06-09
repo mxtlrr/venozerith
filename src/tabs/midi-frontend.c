@@ -7,21 +7,60 @@ user_details_t main_details = {
 
 int bpm = 240;
 
-
 track_t track1 = { .bpm = 0, .codes = "---------------" };
 track_t track2 = { .bpm = 0, .codes = "---------------" };
 track_t track3 = { .bpm = 0, .codes = "---------------" };
 
 bool playing = false;
 
+// X,Y
+Vector2 arrow_location = { 0,0 };
+
+void set_arrow_loc(float x, float y){
+  arrow_location.x=x;
+  arrow_location.y=y;
+}
+
+void move_arrow(unsigned char loc){
+  switch(loc){
+    case GO_LEFT:
+      arrow_location.x -= 10;
+      break;
+    case GO_RIGHT:
+      arrow_location.x += 10;
+      break;
+
+    case GO_DOWN:
+      arrow_location.y -= 20;
+      break;
+
+    case GO_UP:
+      arrow_location.y += 20;
+      break;
+  }
+}
+
+
 void GrabInput(keybinding_arr k, sounds_t s){
   // Change track
-  if(IsKeyPressed(KEY_DOWN) && (main_details.track < 3))  main_details.track++;
-  if(IsKeyPressed(KEY_UP)   && (main_details.track > 1))  main_details.track--;
+  if(IsKeyPressed(KEY_DOWN) && (main_details.track < 3)) {
+    main_details.track++;
+    move_arrow(GO_UP);
+  }
+  if(IsKeyPressed(KEY_UP)   && (main_details.track > 1)) {
+    main_details.track--;
+    move_arrow(GO_DOWN);
+  }
 
   // Move back and forth in codes
-  if(IsKeyPressed(KEY_LEFT)  && (main_details.code > 1))  main_details.code--;
-  if(IsKeyPressed(KEY_RIGHT) && (main_details.code < 15)) main_details.code++;
+  if(IsKeyPressed(KEY_LEFT)  && (main_details.code > 1)){ 
+    main_details.code--;
+    move_arrow(GO_LEFT);
+  }
+  if(IsKeyPressed(KEY_RIGHT) && (main_details.code < 15)){
+    main_details.code++;
+    move_arrow(GO_RIGHT);
+  }
 
   // Set current location
   // TODO: Refactor this code.
@@ -101,6 +140,8 @@ void DrawMIDI(){
             playing ? "Yes" : " No", bpm), 50, 50, 20, BLACK);
 
   // Draw each track
+  DrawText("v", arrow_location.x, arrow_location.y, 20, RED);
+
   DrawText(TextFormat("%s", track1.codes), 50, 90, 20, BLACK);
   DrawText(TextFormat("%s", track2.codes), 50, 110, 20, BLACK);
   DrawText(TextFormat("%s", track3.codes), 50, 130, 20, BLACK);

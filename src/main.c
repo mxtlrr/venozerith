@@ -18,6 +18,7 @@ char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 void _(){}
 int main(void) {
 	theme_t theme = get_theme("config/themes.ini");
+	set_arrow_loc(50,70);
 
 	SetTraceLogCallback(_); // Disable trace log callback
 
