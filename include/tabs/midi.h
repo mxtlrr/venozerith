@@ -23,6 +23,12 @@ enum CODE_VALUES {
   NOTHING = '-'
 };
 
+enum TRACKS {
+  TRACK1 = 1,
+  TRACK2 = 2,
+  TRACK3 = 3
+};
+
 typedef struct {
   char codes[15];
   int bpm;

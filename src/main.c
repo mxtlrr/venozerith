@@ -6,8 +6,10 @@
 #include "keybindings.h"
 #include "config.h"
 #include "sound/sound.h"
-#include "tabs/midi.h"
 #include "frames.h"
+
+#include "tabs/midi.h"
+#include "tabs/midi-frontend.h"
 
 char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
@@ -23,14 +25,6 @@ int main(void) {
 	keybinding_arr k = get_keybinds(test);
 
 	sounds_t s = loadSounds();
-
-	track_t track1 = { .bpm = 360, .codes = "---------------" };
-	track_t track2 = { .bpm = 360, .codes = "S-S-S-S-S-S-S-S" };
-	track_t track3 = { .bpm = 360, .codes = "-K-K-K-K-K-K-K-" };
-
-	midi_t midi = make_midi_from_tracks(track1, track2, track3);
-	play_midi(midi, s);
-
 
 	int tab = 1; // Current tab we're on
 	while(!WindowShouldClose()){
@@ -78,6 +72,8 @@ int main(void) {
 					DrawText(tabs[3], 300, 450, 20, GRAY);
 
 					// TODO:
+					GrabInput(k);
+					DrawMIDI(240);
 					break;
 
 				// Show keybindings
