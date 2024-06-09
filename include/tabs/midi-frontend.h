@@ -16,10 +16,15 @@ typedef struct {
 
 extern user_details_t main_details;
 extern bool playing;                // Are we playing the MIDI?
+extern int bpm;
+
+
+#define LOWER_BOUND 240
+#define UPPER_BOUND 1480
 
 // Called each frame. Checks for input and modifies user details,
 // defined as main_details.
 void GrabInput(keybinding_arr k, sounds_t s);
 
 // Meat and potatoes, draws everything to the screen.
-void DrawMIDI(int bpm);
+void DrawMIDI();

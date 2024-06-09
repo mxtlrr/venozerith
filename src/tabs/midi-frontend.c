@@ -5,6 +5,8 @@ user_details_t main_details = {
   .track = 1,     // the 1st track.
 };
 
+int bpm = 240;
+
 
 track_t track1 = { .bpm = 0, .codes = "---------------" };
 track_t track2 = { .bpm = 0, .codes = "---------------" };
@@ -75,7 +77,9 @@ void GrabInput(keybinding_arr k, sounds_t s){
     }
   }
 
-  // printf("%s\n%s\n%s\n", track1.codes, track2.codes, track3.codes);
+  // TODO: Let lower bound be configurable.
+  if(IsKeyPressed(KEY_MINUS) && (bpm > LOWER_BOUND)) bpm -= 10;
+  if(IsKeyPressed(KEY_EQUAL) && (bpm < UPPER_BOUND)) bpm += 10;
 
   if(IsKeyPressed(KEY_P)) playing = !playing;
   if(playing){
@@ -88,13 +92,13 @@ void GrabInput(keybinding_arr k, sounds_t s){
   // TODO: implement playing
 }
 
-void DrawMIDI(int bpm){
+void DrawMIDI(){
   // Set bpm of tracks
   track1.bpm=bpm;track2.bpm=bpm;track3.bpm=bpm;
 
-  DrawText(TextFormat("Track %d, Code %d | Playing MIDI? %s",
+  DrawText(TextFormat("Track %d, Code %d | Playing MIDI? %s | BPM=%d",
             main_details.track, main_details.code,
-            playing ? "Yes" : " No"), 50, 50, 20, BLACK);
+            playing ? "Yes" : " No", bpm), 50, 50, 20, BLACK);
 
   // Draw each track
   DrawText(TextFormat("%s", track1.codes), 50, 90, 20, BLACK);

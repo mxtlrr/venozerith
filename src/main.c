@@ -73,7 +73,7 @@ int main(void) {
 
 					// TODO:
 					GrabInput(k,s);
-					DrawMIDI(240);
+					DrawMIDI();
 					break;
 
 				// Show keybindings

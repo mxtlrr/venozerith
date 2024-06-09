@@ -1,7 +1,7 @@
 #include "tabs/midi.h"
 
 midi_t make_midi_from_tracks(track_t track1, track_t track2, track_t track3){
-  track_t empty2 = {.bpm = 0x00, .codes = 0};
+  track_t empty2 = {.bpm = 0x00, .codes = {0}};
   midi_t empty = { .bpm = 0, .tracks = {empty2,empty2,empty2} };
 
   if(track1.bpm != track2.bpm && track2.bpm != track3.bpm){
