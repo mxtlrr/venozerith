@@ -34,11 +34,9 @@ void play_midi(midi_t midi, sounds_t sounds){
   // FIXME: Don't use Sleep()
   for(int i = 0; i < 15; i++){
     for(int j = 0; j < 3; j++){
-      // printf("%c\n", cool[i][j]);
       switch(cool[i][j]){
         case 'S':
           PlaySound(sounds.sounds[0]);
-          // printf("Ok");
           break;
         case 'H':
           PlaySound(sounds.sounds[1]);

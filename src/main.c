@@ -21,7 +21,7 @@ int main(void) {
 	InitAudioDevice();
 	SetTargetFPS(1000);
 
-	char* test = data_from_file("keys.ini");
+	char* test = data_from_file("config/keys.ini");
 	keybinding_arr k = get_keybinds(test);
 
 	sounds_t s = loadSounds();

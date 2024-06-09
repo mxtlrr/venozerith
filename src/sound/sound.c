@@ -19,8 +19,8 @@ int get_len(int bpm, float sound_len){
 
 sounds_t loadSounds(){
   sounds_t s = { 0 };
-  s.sounds[0] = LoadSound("src/samples/snare.mp3");
-  s.sounds[1] = LoadSound("src/samples/hihat.mp3");
-  s.sounds[2] = LoadSound("src/samples/kick.mp3");
+  s.sounds[0] = LoadSound("config/samples/snare.mp3");
+  s.sounds[1] = LoadSound("config/samples/hihat.mp3");
+  s.sounds[2] = LoadSound("config/samples/kick.mp3");
   return s;
 }
