@@ -12,7 +12,7 @@ track_t track3 = { .bpm = 0, .codes = "---------------" };
 
 bool playing = false;
 
-void GrabInput(keybinding_arr k){
+void GrabInput(keybinding_arr k, sounds_t s){
   // Change track
   if(IsKeyPressed(KEY_DOWN) && (main_details.track < 3))  main_details.track++;
   if(IsKeyPressed(KEY_UP)   && (main_details.track > 1))  main_details.track--;
@@ -78,6 +78,13 @@ void GrabInput(keybinding_arr k){
   // printf("%s\n%s\n%s\n", track1.codes, track2.codes, track3.codes);
 
   if(IsKeyPressed(KEY_P)) playing = !playing;
+  if(playing){
+    midi_t midi = make_midi_from_tracks(track1,track2,track3);
+    play_midi(midi, s);
+
+    // Don't replay
+    playing = false;
+  }
   // TODO: implement playing
 }
 

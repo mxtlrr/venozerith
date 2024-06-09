@@ -72,7 +72,7 @@ int main(void) {
 					DrawText(tabs[3], 300, 450, 20, GRAY);
 
 					// TODO:
-					GrabInput(k);
+					GrabInput(k,s);
 					DrawMIDI(240);
 					break;
 
