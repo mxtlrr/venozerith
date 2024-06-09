@@ -4,11 +4,14 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <raylib.h>
 
 typedef struct {
   Color primary_text;     // Focused text (Tab, Active indicator, GUI text, etc.)
-  Color nonfocused_text;  // Stuff like the text that isn
+  Color nonfocused_text;  // Stuff like the text that isn't focused.
   Color background;       // Self explanatory
 } theme_t;
 

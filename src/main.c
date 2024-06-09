@@ -4,9 +4,11 @@
 
 #include "version.h"
 #include "keybindings.h"
-#include "config.h"
 #include "sound/sound.h"
 #include "frames.h"
+
+#include "config.h"
+#include "themes.h"
 
 #include "tabs/midi.h"
 #include "tabs/midi-frontend.h"
@@ -15,6 +17,8 @@ char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
 
 void _(){}
 int main(void) {
+	theme_t theme = get_theme("config/themes.ini");
+
 	SetTraceLogCallback(_); // Disable trace log callback
 
 	InitWindow(640, 480, TextFormat("Venozerith - v%s", VERSION));
@@ -37,16 +41,16 @@ int main(void) {
 		
 
 		BeginDrawing();
-			ClearBackground(WHITE);
-			DrawText(TextFormat("TAB: %d", tab), 10, 10, 20, BLACK);
+			ClearBackground(theme.background);
+			DrawText(TextFormat("TAB: %d", tab), 10, 10, 20, theme.primary_text);
 
 			switch(tab){
 				// Play live
 				case 1:
 					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, BLACK);
-					DrawText(tabs[2], 175, 450, 20, GRAY);
-					DrawText(tabs[3], 300, 450, 20, GRAY);
+					DrawText(tabs[1], 10, 450, 20, theme.primary_text);
+					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
 
 					// Snare
 					if(IsKeyPressed(k.keys[0].key)) {
@@ -67,9 +71,9 @@ int main(void) {
 				// MIDI Editor
 				case 2:
 					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, GRAY);
-					DrawText(tabs[2], 175, 450, 20, BLACK);
-					DrawText(tabs[3], 300, 450, 20, GRAY);
+					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[2], 175, 450, 20, theme.primary_text);
+					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
 
 					// TODO:
 					GrabInput(k,s);
@@ -79,26 +83,26 @@ int main(void) {
 				// Show keybindings
 				case 3:
 					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, GRAY);
-					DrawText(tabs[2], 175, 450, 20, GRAY);
-					DrawText(tabs[3], 300, 450, 20, BLACK);
+					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[3], 300, 450, 20, theme.primary_text);
 
 					int starting_y = 50;
 					for(int i = 0; i < 3; i++) {
 						DrawText(TextFormat("Key \"%c\" - Action: %s",
 												keys[(k.keys[i].key)],
 												get_action_from_num(k.keys[i].action)), 50,
-												starting_y, 20, BLACK);
+												starting_y, 20, theme.primary_text);
 						starting_y += 30;
 					}
 					break;
 			}
 
-		DrawText(TextFormat("%.4d / 1000", getframes()), 510, 450, 20, GRAY);
+		DrawText(TextFormat("%.4d", getframes()), 510, 450, 20, theme.nonfocused_text);
 		EndDrawing();
 
-		if((getframes() <= 1000)) setframes(getframes() + 1);
-		else setframes(0);
+
+		setframes(getframes() + 1);
 	}
 	
 	for(int i = 0; i < 3; i++){
