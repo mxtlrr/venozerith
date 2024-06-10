@@ -88,7 +88,7 @@ int main(void) {
 
 					// TODO:
 					GrabInput(k,s);
-					DrawMIDI();
+					DrawMIDI(theme);
 					break;
 
 				// Show keybindings

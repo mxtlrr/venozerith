@@ -8,6 +8,7 @@
 
 #include "tabs/midi.h"
 #include "config.h"
+#include "themes.h"
 
 typedef struct {
   unsigned char code;   // 1 - 15 (or 16?)
@@ -27,7 +28,7 @@ extern int bpm;
 void GrabInput(keybinding_arr k, sounds_t s);
 
 // Meat and potatoes, draws everything to the screen.
-void DrawMIDI();
+void DrawMIDI(theme_t t);
 
 /* Indicator */
 enum LOC {

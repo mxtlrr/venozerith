@@ -128,22 +128,21 @@ void GrabInput(keybinding_arr k, sounds_t s){
     // Don't replay
     playing = false;
   }
-  // TODO: implement playing
 }
 
-void DrawMIDI(){
+void DrawMIDI(theme_t t){
   // Set bpm of tracks
   track1.bpm=bpm;track2.bpm=bpm;track3.bpm=bpm;
 
   DrawText(TextFormat("Track %d, Code %d | Playing MIDI? %s | BPM=%d",
             main_details.track, main_details.code,
-            playing ? "Yes" : " No", bpm), 50, 50, 20, BLACK);
+            playing ? "Yes" : " No", bpm), 50, 50, 20, t.primary_text);
 
   // Draw each track
   DrawText("v", arrow_location.x, arrow_location.y, 20, RED);
 
-  DrawText(TextFormat("%s", track1.codes), 50, 90, 20, BLACK);
-  DrawText(TextFormat("%s", track2.codes), 50, 110, 20, BLACK);
-  DrawText(TextFormat("%s", track3.codes), 50, 130, 20, BLACK);
+  DrawText(TextFormat("%s", track1.codes), 50, 90, 20, t.primary_text);
+  DrawText(TextFormat("%s", track2.codes), 50, 110, 20, t.primary_text);
+  DrawText(TextFormat("%s", track3.codes), 50, 130, 20, t.primary_text);
   
 }
