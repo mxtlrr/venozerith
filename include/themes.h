@@ -17,5 +17,12 @@ typedef struct {
 
 // Hex format is 0xRRGGBB. Alpha channel is always 1.
 Color hex2color(__uint32_t hex);
+unsigned int color2hex(Color c);
 
+extern theme_t default_themes[2];
 theme_t get_theme(char* file);
+theme_t set_theme(theme_t new);
+
+// Are we using a default theme?
+bool using_default_theme(theme_t current_theme);
+int which_theme(theme_t current_theme);

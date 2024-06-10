@@ -88,3 +88,48 @@ theme_t get_theme(char* file){
   free(buffer);
   return theme;
 }
+
+/* Probably delete this idk. */
+theme_t set_theme(theme_t new){
+  return new;
+}
+
+unsigned int color2hex(Color c){
+  __uint8_t r = c.r;
+  __uint8_t g = c.g;
+  __uint8_t b = c.b;
+
+  unsigned int color = (r<<16) | (g<<8) | b;
+  return color;
+}
+
+
+theme_t default_themes[2] = {
+  { .background = (Color){255,255,255,255}, .primary_text = (Color){0,0,0,255}, .nonfocused_text = (Color){209,209,209,255}}, // Light mode
+  { .background = (Color){0,0,0,255}, .primary_text = (Color){255,255,255,255}, .nonfocused_text = (Color){209,209,209,255}}  // Dark one
+};
+
+bool using_default_theme(theme_t current_theme){
+
+  bool res = false;
+  for(int i = 0; i < 2; i++){
+    if(color2hex(current_theme.background) == color2hex(default_themes[i].background)
+        && (color2hex(current_theme.nonfocused_text) == color2hex(default_themes[i].nonfocused_text))
+        && (color2hex(current_theme.primary_text) == color2hex(default_themes[i].primary_text))){
+          res = true;
+          return res;
+    }
+  }
+  return res;
+}
+
+int which_theme(theme_t current_theme){
+  for(int i = 0; i < 2; i++){
+    if(color2hex(current_theme.background) == color2hex(default_themes[i].background)
+        && (color2hex(current_theme.nonfocused_text) == color2hex(default_themes[i].nonfocused_text))
+        && (color2hex(current_theme.primary_text) == color2hex(default_themes[i].primary_text))){
+          return i;
+    }
+  }
+  return -1;
+}

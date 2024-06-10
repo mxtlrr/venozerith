@@ -13,11 +13,19 @@
 #include "tabs/midi.h"
 #include "tabs/midi-frontend.h"
 
-char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings" };
+char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings",
+								 "Themes" };
+char* themes[] = { "Light Mode", "Dark Mode" };
+
 
 void _(){}
 int main(void) {
 	theme_t theme = get_theme("config/themes.ini");
+	bool res = using_default_theme(theme);
+	if(!res){
+		printf("[..] Theme loaded from file is not default.\n");
+	}
+
 	set_arrow_loc(50,70);
 
 	SetTraceLogCallback(_); // Disable trace log callback
@@ -52,6 +60,7 @@ int main(void) {
 					DrawText(tabs[1], 10, 450, 20, theme.primary_text);
 					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
 					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
 
 					// Snare
 					if(IsKeyPressed(k.keys[0].key)) {
@@ -75,6 +84,7 @@ int main(void) {
 					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
 					DrawText(tabs[2], 175, 450, 20, theme.primary_text);
 					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
 
 					// TODO:
 					GrabInput(k,s);
@@ -87,6 +97,7 @@ int main(void) {
 					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
 					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
 					DrawText(tabs[3], 300, 450, 20, theme.primary_text);
+					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
 
 					int starting_y = 50;
 					for(int i = 0; i < 3; i++) {
@@ -97,6 +108,25 @@ int main(void) {
 						starting_y += 30;
 					}
 					break;
+
+				case 4:
+					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
+					DrawText(tabs[4], 400, 450, 20, theme.primary_text);
+					bool check = using_default_theme(theme);
+					int theme_index = which_theme(theme);
+
+					DrawText(TextFormat("You %s using a default theme. (%s)\nUse arrow keys to change theme.",
+								check ? "are" : "are not", themes[theme_index]), 50, 50, 20, theme.primary_text);
+
+					if(theme_index == -1) {
+						// Do nothing when we get the left arrow.
+						if(IsKeyPressed(KEY_RIGHT)) theme = set_theme(default_themes[0]);
+					}
+
+					if(IsKeyPressed(KEY_RIGHT) && theme_index != 1) theme = set_theme(default_themes[1]);
+					if(IsKeyPressed(KEY_LEFT)  && theme_index != 0) theme = set_theme(default_themes[0]);
 			}
 
 		DrawText(TextFormat("%.4d", getframes()), 510, 450, 20, theme.nonfocused_text);
