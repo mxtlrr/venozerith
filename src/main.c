@@ -5,6 +5,7 @@
 #include "version.h"
 #include "keybindings.h"
 #include "sound/sound.h"
+#include "sound/find-sounds.h"
 #include "frames.h"
 
 #include "config.h"

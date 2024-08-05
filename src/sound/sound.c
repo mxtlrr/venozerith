@@ -1,4 +1,5 @@
 #include "sound/sound.h"
+#include "sound/find-sounds.h"
 
 // Order:
 // Snare, Hi-hat, Kick
@@ -19,8 +20,12 @@ int get_len(int bpm, float sound_len){
 
 sounds_t loadSounds(){
   sounds_t s = { 0 };
-  s.sounds[0] = LoadSound("config/samples/snare.mp3");
-  s.sounds[1] = LoadSound("config/samples/hihat.mp3");
-  s.sounds[2] = LoadSound("config/samples/kick.mp3");
+  result_t r = findSounds("config/samples");
+  for(int i = 0; i < 256; i++){
+    if(r.r[i] != NULL){
+      s.sounds[i] = LoadSound(r.r[i]);
+      printf("Loaded \"%s\" as sound %d\n", r.r[i], i);
+    } else break; // No more files, what are we doing?
+  }
   return s;
 }
