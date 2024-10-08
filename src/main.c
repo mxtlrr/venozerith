@@ -1,11 +1,18 @@
 #include <raylib.h>
 #include <stdio.h>
 
+#include "keys/cfg.h"
 #include "audio.h"
 
 void _(){}
 
-int current_tab = 0;
+#define RESERVED1 1	// TODO
+#define KEYBINDS  2
+#define MIDI_ED   3
+#define SANDBOX   4
+#define RESERVED2 5	// TODO
+
+int current_tab = 1;
 char* tabs[] = {
 	"Reserved", "Keybinds", "MIDI Editor",
 	"Sandbox", "Reserved"
@@ -14,10 +21,25 @@ char* tabs[] = {
 int main(void){
   SetTraceLogCallback(_);
 
-	find_samples("/home/nick/music/hof");
+	// Find samples in the samples directory
+	find_samples("samples");
+
+	// Get user keybindings
+	parse_keybinds();
 
   InitWindow(800, 600, "Venozerith");
+	InitAudioDevice();
   SetTargetFPS(240); // Eventually change this
+
+	
+	// Load every single sound
+	Sound snds[256];
+	for(int i = 0; i < 6; i++){
+		snds[i] = LoadSound(samples[i].ident);
+		if(strcmp(samples[i].ident, "") != 0){
+			printf("[+] loaded sample \"%s\" at index %d\n", samples[i].ident, i);
+		}
+	}
 
   while(!WindowShouldClose()){
 		// Tab swapping.
@@ -26,9 +48,26 @@ int main(void){
 			current_tab = (get_k - 48);
 		}
 
-    BeginDrawing();
-			// TODO: stuff for specific tabs
 
+    BeginDrawing();
+
+			// Individual stuff.
+			switch(current_tab){
+				case KEYBINDS:
+					int y = 40;
+					for(int i = 0; i < 4; i++){
+						DrawText(TextFormat("%c - %s", sc[i], table[i]), 50, y, 20, BLACK);
+						y += 20;
+					}
+					break;
+
+				case SANDBOX:
+					// TODO: open a thread each time a key is pressed so you don't get
+					// the weird cut off. Works for now.
+					for(int i = 0; i < 4; i++)
+						if(IsKeyPressed(sc[i])) PlaySound(snds[i]);
+					break;
+			}
 
 			// Draw the tabs (indicator)
 			int q = 10;
