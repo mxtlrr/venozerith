@@ -1,10 +1,16 @@
 #include <raylib.h>
 #include <stdio.h>
 
+#include "audio.h"
+
 void _(){}
 
 int main(void){
   SetTraceLogCallback(_);
+
+	find_samples("/home/nick/music/hof");
+
+	return 0;
   InitWindow(800, 600, "Venozerith");
   SetTargetFPS(240); // ?
 
