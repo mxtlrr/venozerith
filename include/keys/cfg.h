@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "keys/ini.h"
+
 extern uint8_t sc[4];
 extern char* table[4]; // 1-to-1 correspondence with sc.
 

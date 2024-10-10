@@ -25,6 +25,9 @@ int main(void){
 	find_samples("samples");
 
 	// Get user keybindings
+	parse_file("config.ini");
+	printf("[+] INI file loaded. %d tags with %d total keys.\n", ini_tag_ct,
+				ini_key_ct);
 	parse_keybinds();
 
   InitWindow(800, 600, "Venozerith");
