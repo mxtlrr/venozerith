@@ -1,146 +1,104 @@
 #include <raylib.h>
 #include <stdio.h>
 
+#include "keys/cfg.h"
+#include "theme.h"
+#include "audio.h"
 
-#include "version.h"
-#include "keybindings.h"
-#include "sound/sound.h"
-#include "sound/find-sounds.h"
-#include "frames.h"
-
-#include "config.h"
-#include "themes.h"
-
-#include "tabs/midi.h"
-#include "tabs/midi-frontend.h"
-
-char* tabs[] = { "Reserved", "Manual Sounds", "MIDI Editor", "Settings",
-								 "Themes" };
-char* themes[] = { "Light Mode", "Dark Mode" };
-
+#define ARRL(x) (sizeof(x)/(sizeof(x[0])))
 
 void _(){}
-int main(void) {
-	theme_t theme = get_theme("config/themes.ini");
-	bool res = using_default_theme(theme);
-	if(!res){
-		printf("[..] Theme loaded from file is not default.\n");
+
+#define SANDBOX   1
+#define KEYBINDS  2
+#define MIDI_ED   3
+#define THEMES    4
+int current_tab = 1;
+char* tabs[] = {
+	"Sandbox", "Keybinds", "MIDI Editor", "Themes"
+};
+
+int main(void){
+  SetTraceLogCallback(_);
+
+	// Find samples in the samples directory
+	find_samples("samples");
+
+	// Get user keybindings
+	parse_file("config.ini");
+	printf("[+] INI file loaded. %d tags with %d total keys.\n", ini_tag_ct,
+				ini_key_ct);
+	parse_keybinds();
+	
+	// Update theme, and make changes if needed.
+	load_from_ini();
+
+  InitWindow(800, 600, "Venozerith");
+	InitAudioDevice();
+  SetTargetFPS(240); // Eventually change this
+
+	
+	// Load every single sound
+	Sound snds[256];
+	for(int i = 0; i < 6; i++){
+		snds[i] = LoadSound(samples[i].ident);
+		if(strcmp(samples[i].ident, "") != 0){
+			printf("[+] loaded sample \"%s\" at index %d\n", samples[i].ident, i);
+		}
 	}
 
-	set_arrow_loc(50,70);
+  while(!WindowShouldClose()){
+		// Tab swapping.
+		int get_k = GetKeyPressed();
+		if(get_k >= 49 && get_k <= 54){
+			current_tab = (get_k - 48);
+		}
 
-	SetTraceLogCallback(_); // Disable trace log callback
 
-	InitWindow(640, 480, TextFormat("Venozerith - v%s", VERSION));
-	InitAudioDevice();
-	SetTargetFPS(1000);
+    BeginDrawing();
 
-	char* test = data_from_file("config/keys.ini");
-	keybinding_arr k = get_keybinds(test);
-
-	sounds_t s = loadSounds();
-
-	int tab = 1; // Current tab we're on
-	while(!WindowShouldClose()){
-		
-		// Stupid code to change tabs
-		if(IsKeyPressed(KEY_ONE)) tab = 1;
-		if(IsKeyPressed(KEY_TWO)) tab = 2;
-		if(IsKeyPressed(KEY_THREE)) tab = 3;
-		if(IsKeyPressed(KEY_FOUR)) tab = 4;
-		
-
-		BeginDrawing();
-			ClearBackground(theme.background);
-			DrawText(TextFormat("TAB: %d", tab), 10, 10, 20, theme.primary_text);
-
-			switch(tab){
-				// Play live
-				case 1:
-					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, theme.primary_text);
-					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
-
-					// Snare
-					if(IsKeyPressed(k.keys[0].key)) {
-						PlaySound(s.sounds[0]);
-					}
-					
-					// Hi-hat
-					if(IsKeyPressed(k.keys[1].key)) {
-						PlaySound(s.sounds[1]);
-					}
-
-					// Kick
-					if(IsKeyPressed(k.keys[2].key)) {
-						PlaySound(s.sounds[2]);
+			// Individual stuff.
+			switch(current_tab){
+				case KEYBINDS:
+					int y = 40;
+					for(int i = 0; i < 4; i++){
+						DrawText(TextFormat("%c - %s", sc[i], table[i]), 50, y, 20,
+											rgb_to_color(palette[1]));
+						y += 20;
 					}
 					break;
 
-				// MIDI Editor
-				case 2:
-					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[2], 175, 450, 20, theme.primary_text);
-					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
-
-					// TODO:
-					GrabInput(k,s);
-					DrawMIDI(theme);
+				case SANDBOX:
+					for(int i = 0; i < 4; i++)
+						if(IsKeyPressed(sc[i])) PlaySound(snds[i]);
 					break;
 
-				// Show keybindings
-				case 3:
-					// Active indicator
-					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[3], 300, 450, 20, theme.primary_text);
-					DrawText(tabs[4], 390, 450, 20, theme.nonfocused_text);
-
-					int starting_y = 50;
-					for(int i = 0; i < 3; i++) {
-						DrawText(TextFormat("Key \"%c\" - Action: %s",
-												keys[(k.keys[i].key)],
-												get_action_from_num(k.keys[i].action)), 50,
-												starting_y, 20, theme.primary_text);
-						starting_y += 30;
+				case THEMES:
+					y = 40;
+					for(int i = 0; i < (int)ARRL(palette); i++){
+						DrawText(TextFormat("%s: #%.6x",
+								palette_descriptors[i], palette[i]), 50, y, 20,
+								rgb_to_color(palette[1]));
+						y+=20;
 					}
 					break;
-
-				case 4:
-					DrawText(tabs[1], 10, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[2], 175, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[3], 300, 450, 20, theme.nonfocused_text);
-					DrawText(tabs[4], 400, 450, 20, theme.primary_text);
-					bool check = using_default_theme(theme);
-					int theme_index = which_theme(theme);
-
-					DrawText(TextFormat("You %s using a default theme. (%s)\nUse arrow keys to change theme.",
-								check ? "are" : "are not", themes[theme_index]), 50, 50, 20, theme.primary_text);
-
-					if(theme_index == -1) {
-						// Do nothing when we get the left arrow.
-						if(IsKeyPressed(KEY_RIGHT)) theme = set_theme(default_themes[0]);
-					}
-
-					if(IsKeyPressed(KEY_RIGHT) && theme_index != 1) theme = set_theme(default_themes[1]);
-					if(IsKeyPressed(KEY_LEFT)  && theme_index != 0) theme = set_theme(default_themes[0]);
 			}
 
-		DrawText(TextFormat("%.4d", getframes()), 510, 450, 20, theme.nonfocused_text);
-		EndDrawing();
+			// Draw the tabs (indicator)
+			int q = 10;
+			for(int i = 0; i < (int)ARRL(tabs); i++){
+				if(current_tab == i+1) DrawText(TextFormat("%s", tabs[i]), q, 10, 20,
+						rgb_to_color(palette[0]));
+				else DrawText(TextFormat("%s", tabs[i]), q, 10, 20,
+							rgb_to_color(palette[2]));
+				q += 140;
+			}
 
-
-		setframes(getframes() + 1);
-	}
-	
-	for(int i = 0; i < 3; i++){
-		UnloadSound(s.sounds[i]);
-	}
-	CloseAudioDevice();
-	CloseWindow();
-	return 0;
+      // Status bar
+      DrawText(TextFormat("git-%s", GIT_HASH), 10, 580, 10, rgb_to_color(palette[1]));
+      ClearBackground(rgb_to_color(palette[3]));
+    EndDrawing();
+  }
+  CloseWindow();
+  return 0;
 }

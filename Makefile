@@ -1,5 +1,8 @@
 CC := gcc
-CFLAGS  := -Wall -Wextra -std=c99 -Os -g -Iinclude/ $(LDFLAGS)
+
+GIT_HASH := $(shell git describe --always --dirty --match 'NOT A TAG')
+CFLAGS  := -Wall -Wextra -std=c99 -Os -g -Iinclude/ $(LDFLAGS) \
+			-DGIT_HASH=\"$(GIT_HASH)\"
 LDFLAGS := -lraylib -lm
 
 TARGET := bin/venozerith
