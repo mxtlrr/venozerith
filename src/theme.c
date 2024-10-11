@@ -21,3 +21,19 @@ uint32_t col_to_rgb(Color c){
   // channel.
   return (((c.r << 8) + c.g) << 8) + c.b;
 }
+
+void load_from_ini(void){
+  tag_t s = get_tag(1);
+  for(int i = 0; i < 100; i++){
+    if(s.keys[i].ident[0] == 0);
+    else {
+      uint32_t color = strtoul(s.keys[i].value, NULL, 16);
+      char* id = s.keys[i].ident;
+
+      if(strcmp(id, "active") == 0) palette[0] = color;
+      if(strcmp(id, "foreground") == 0) palette[1] = color;
+      if(strcmp(id, "inactive") == 0) palette[2] = color;
+      if(strcmp(id, "background") == 0) palette[3] = color; 
+    }
+  }
+}

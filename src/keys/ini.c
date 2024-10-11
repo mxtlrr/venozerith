@@ -46,6 +46,7 @@ void parse_file(char* path_to_ini){
 				}
 				strcpy(tags[ini_tag_ct].ident, nz);
 				ini_tag_ct++;
+				ini_key_ct = 0; // reset
 			}
 			// now we add the keys!!
 			else if(token[0] != 0 ){
@@ -63,7 +64,6 @@ void parse_file(char* path_to_ini){
 				strncpy(tags[ini_tag_ct-1].keys[ini_key_ct].value, value, strlen(value));
 				ini_key_ct++;
 			}
-			
 		}
 		token = strtok(NULL, "\n");
 	}

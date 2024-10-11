@@ -29,6 +29,9 @@ int main(void){
 	printf("[+] INI file loaded. %d tags with %d total keys.\n", ini_tag_ct,
 				ini_key_ct);
 	parse_keybinds();
+	
+	// Update theme, and make changes if needed.
+	load_from_ini();
 
   InitWindow(800, 600, "Venozerith");
 	InitAudioDevice();
