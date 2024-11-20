@@ -9,7 +9,14 @@ char* table[4] = { "Snare", "Kick", "Cymbal", "Hi-hat" };
 
 void parse_keybinds(void){
 	tag_t n = get_tag(0);		// DRUMS is tag 0.
-	if(strcmp(n.ident, "drums") != 0){
+
+	// FIXME: On Windows, char* isn't really NULL terminated, so using
+	// strcmp doesn't really work. I'm not sure why, but this should be fixed eventually.
+
+	// Also FIXME, on Windows, the [drums] tag is set to [drumss/audio file], for example [drumss/snare.wav].
+	// Weird. Maybe a different implementation for different versions. Either way, strstr should
+	// work for most purposes.
+	if(strstr(n.ident, "drums") == NULL){
 		fprintf(stderr, "[:(] Tag 0 for INI file must be \"drums\", however, it's set to \"%s\".\n", n.ident);
 		exit(1);
 	}
