@@ -3,7 +3,12 @@ CC := gcc
 GIT_HASH := $(shell git describe --always --dirty --match 'NOT A TAG')
 CFLAGS  := -Wall -Wextra -std=c99 -Os -g -Iinclude/ $(LDFLAGS) \
 			-DGIT_HASH=\"$(GIT_HASH)\"
+
 LDFLAGS := -lraylib -lm
+
+ifeq ($(OS),Windows_NT)
+	LDFLAGS += -lgdi32 -lwinmm
+endif
 
 TARGET := bin/venozerith
 override OFILES := $(shell find ./obj/ -type f -name '*.o')
