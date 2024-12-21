@@ -9,13 +9,14 @@
 
 void _(){}
 
-#define SANDBOX   1
-#define KEYBINDS  2
-#define MIDI_ED   3
-#define THEMES    4
+#define SANDBOX    1
+#define KEYBINDS   2
+#define DRUM_TAB_G 3
+#define MIDI_ED    4
+#define THEMES     5
 int current_tab = 1;
 char* tabs[] = {
-	"Sandbox", "Keybinds", "MIDI Editor", "Themes"
+	"Sandbox", "View Keybinds", "Drum Tabs", "MIDI Editor", "Themes"
 };
 
 int main(void){
@@ -68,6 +69,10 @@ int main(void){
 					}
 					break;
 
+				case DRUM_TAB_G:
+					// TODO: something.
+					break;
+
 				case SANDBOX:
 					for(int i = 0; i < 4; i++)
 						if(IsKeyPressed(sc[i])) PlaySound(snds[i]);
@@ -91,7 +96,7 @@ int main(void){
 						rgb_to_color(palette[0]));
 				else DrawText(TextFormat("%s", tabs[i]), q, 10, 20,
 							rgb_to_color(palette[2]));
-				q += 140;
+				q += 170;
 			}
 
       // Status bar
